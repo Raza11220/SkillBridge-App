@@ -14,16 +14,347 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      credibility_scores: {
+        Row: {
+          consistency_score: number
+          created_at: string
+          delivery_score: number
+          id: string
+          last_calculated_at: string
+          on_time_deliveries: number
+          overall_score: number
+          quality_score: number
+          skill_match_score: number
+          total_projects: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          consistency_score?: number
+          created_at?: string
+          delivery_score?: number
+          id?: string
+          last_calculated_at?: string
+          on_time_deliveries?: number
+          overall_score?: number
+          quality_score?: number
+          skill_match_score?: number
+          total_projects?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          consistency_score?: number
+          created_at?: string
+          delivery_score?: number
+          id?: string
+          last_calculated_at?: string
+          on_time_deliveries?: number
+          overall_score?: number
+          quality_score?: number
+          skill_match_score?: number
+          total_projects?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      freelancer_skills: {
+        Row: {
+          created_at: string
+          id: string
+          proficiency_level: number | null
+          skill_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          proficiency_level?: number | null
+          skill_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          proficiency_level?: number | null
+          skill_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "freelancer_skills_skill_id_fkey"
+            columns: ["skill_id"]
+            isOneToOne: false
+            referencedRelation: "skills"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          full_name: string
+          hourly_rate: number | null
+          id: string
+          location: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          full_name: string
+          hourly_rate?: number | null
+          id?: string
+          location?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          full_name?: string
+          hourly_rate?: number | null
+          id?: string
+          location?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      project_assignments: {
+        Row: {
+          assigned_at: string
+          freelancer_id: string
+          id: string
+          project_id: string
+          status: string | null
+        }
+        Insert: {
+          assigned_at?: string
+          freelancer_id: string
+          id?: string
+          project_id: string
+          status?: string | null
+        }
+        Update: {
+          assigned_at?: string
+          freelancer_id?: string
+          id?: string
+          project_id?: string
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_assignments_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_skills: {
+        Row: {
+          created_at: string
+          id: string
+          project_id: string
+          skill_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          skill_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          skill_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_skills_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_skills_skill_id_fkey"
+            columns: ["skill_id"]
+            isOneToOne: false
+            referencedRelation: "skills"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          budget: number | null
+          client_id: string
+          complexity: number | null
+          created_at: string
+          deadline: string | null
+          description: string | null
+          id: string
+          status: Database["public"]["Enums"]["project_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          budget?: number | null
+          client_id: string
+          complexity?: number | null
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["project_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          budget?: number | null
+          client_id?: string
+          complexity?: number | null
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["project_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      skills: {
+        Row: {
+          category: string | null
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      work_history: {
+        Row: {
+          client_id: string
+          created_at: string
+          delivered_on_time: boolean | null
+          freelancer_id: string
+          id: string
+          project_id: string
+          quality_rating: number | null
+          status: Database["public"]["Enums"]["work_status"]
+          submission_notes: string | null
+          submitted_at: string | null
+          updated_at: string
+          verified_at: string | null
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          delivered_on_time?: boolean | null
+          freelancer_id: string
+          id?: string
+          project_id: string
+          quality_rating?: number | null
+          status?: Database["public"]["Enums"]["work_status"]
+          submission_notes?: string | null
+          submitted_at?: string | null
+          updated_at?: string
+          verified_at?: string | null
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          delivered_on_time?: boolean | null
+          freelancer_id?: string
+          id?: string
+          project_id?: string
+          quality_rating?: number | null
+          status?: Database["public"]["Enums"]["work_status"]
+          submission_notes?: string | null
+          submitted_at?: string | null
+          updated_at?: string
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_history_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_role: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "freelancer" | "client" | "admin"
+      project_status:
+        | "draft"
+        | "open"
+        | "in_progress"
+        | "completed"
+        | "cancelled"
+      work_status: "pending" | "submitted" | "verified" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +481,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["freelancer", "client", "admin"],
+      project_status: [
+        "draft",
+        "open",
+        "in_progress",
+        "completed",
+        "cancelled",
+      ],
+      work_status: ["pending", "submitted", "verified", "rejected"],
+    },
   },
 } as const
