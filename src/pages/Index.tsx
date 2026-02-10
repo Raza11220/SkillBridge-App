@@ -1,19 +1,25 @@
-import { Navbar } from "@/components/landing/Navbar";
-import { HeroSection } from "@/components/landing/HeroSection";
-import { FeaturesSection } from "@/components/landing/FeaturesSection";
-import { HowItWorksSection } from "@/components/landing/HowItWorksSection";
-import { CTASection } from "@/components/landing/CTASection";
-import { Footer } from "@/components/landing/Footer";
+import { PortfolioNavbar } from "@/components/portfolio/PortfolioNavbar";
+import { PortfolioHero } from "@/components/portfolio/PortfolioHero";
+import { ServicesSection } from "@/components/portfolio/ServicesSection";
+import { SkillsRadar } from "@/components/portfolio/SkillsRadar";
+import { ProjectShowcase } from "@/components/portfolio/ProjectShowcase";
+import { WorkProcess } from "@/components/portfolio/WorkProcess";
+import { WhyHireMe } from "@/components/portfolio/WhyHireMe";
+import { ContactSection } from "@/components/portfolio/ContactSection";
+import { PortfolioFooter } from "@/components/portfolio/PortfolioFooter";
 
 const Index = () => {
   return (
     <div className="min-h-screen">
-      <Navbar />
-      <HeroSection />
-      <FeaturesSection />
-      <HowItWorksSection />
-      <CTASection />
-      <Footer />
+      <PortfolioNavbar />
+      <PortfolioHero />
+      <ServicesSection />
+      <SkillsRadar />
+      <ProjectShowcase />
+      <WorkProcess />
+      <WhyHireMe />
+      <ContactSection />
+      <PortfolioFooter />
     </div>
   );
 };
