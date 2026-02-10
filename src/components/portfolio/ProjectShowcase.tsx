@@ -1,38 +1,38 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Github } from "lucide-react";
+import { Plus, ExternalLink, Github, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
-const projects = [
-  {
-    title: "E-Commerce Dashboard",
-    problem: "Client needed real-time sales analytics but existing tools were too complex and slow.",
-    stack: ["React", "TypeScript", "Java", "PostgreSQL"],
-    solution: "Built a custom dashboard with real-time charts, inventory tracking, and automated reporting.",
-    result: "40% faster data access, 2x increase in team productivity",
-    demo: "#",
-    github: "#",
-  },
-  {
-    title: "Task Management API",
-    problem: "Startup's workflow was scattered across spreadsheets and emails.",
-    stack: ["Java", "Spring Boot", "SQL", "REST API"],
-    solution: "Designed a clean REST API with role-based access, task assignment, and deadline tracking.",
-    result: "Streamlined operations for 200+ users across 3 departments",
-    demo: "#",
-    github: "#",
-  },
-  {
-    title: "Portfolio Generator",
-    problem: "Freelancers spent hours building portfolios instead of doing client work.",
-    stack: ["React", "Tailwind CSS", "Python", "Automation"],
-    solution: "One-click portfolio builder with customizable templates and auto-deployment.",
-    result: "Saved users an average of 8 hours on portfolio creation",
-    demo: "#",
-    github: "#",
-  },
-];
+interface Project {
+  title: string;
+  problem: string;
+  stack: string[];
+  solution: string;
+  result: string;
+  demo: string;
+  github: string;
+}
 
 export const ProjectShowcase = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState<Project>({
+    title: "", problem: "", stack: [], solution: "", result: "", demo: "", github: "",
+  });
+  const [stackInput, setStackInput] = useState("");
+
+  const handleAdd = () => {
+    if (!form.title || !form.problem) return;
+    setProjects([...projects, { ...form, stack: stackInput.split(",").map(s => s.trim()).filter(Boolean) }]);
+    setForm({ title: "", problem: "", stack: [], solution: "", result: "", demo: "", github: "" });
+    setStackInput("");
+    setShowForm(false);
+  };
+
+  const handleRemove = (i: number) => setProjects(projects.filter((_, idx) => idx !== i));
+
   return (
     <section id="projects" className="py-24 px-6 bg-background">
       <div className="max-w-7xl mx-auto">
@@ -54,19 +54,20 @@ export const ProjectShowcase = () => {
         <div className="space-y-8">
           {projects.map((project, i) => (
             <motion.div
-              key={project.title}
+              key={i}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.15 }}
-              className="group bg-card rounded-2xl border border-border overflow-hidden hover:border-accent/30 transition-all duration-500 hover:shadow-lg"
+              className="group bg-card rounded-2xl border border-border overflow-hidden hover:border-accent/30 transition-all duration-500 hover:shadow-lg relative"
             >
+              <button onClick={() => handleRemove(i)} className="absolute top-4 right-4 text-muted-foreground hover:text-destructive transition-colors">
+                <X className="w-5 h-5" />
+              </button>
               <div className="p-8 md:p-10">
                 <div className="flex flex-col lg:flex-row lg:items-start gap-8">
-                  {/* Left: content */}
                   <div className="flex-1 space-y-5">
                     <h3 className="font-display text-2xl font-bold text-foreground">{project.title}</h3>
-
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-1">
                         <span className="text-destructive font-semibold text-xs uppercase tracking-wider">Problem</span>
@@ -77,46 +78,68 @@ export const ProjectShowcase = () => {
                         <p className="text-foreground/80 text-sm">{project.solution}</p>
                       </div>
                     </div>
-
                     <div className="space-y-1">
                       <span className="text-gold font-semibold text-xs uppercase tracking-wider">Result</span>
                       <p className="text-foreground font-medium text-sm">{project.result}</p>
                     </div>
                   </div>
-
-                  {/* Right: tech + actions */}
                   <div className="lg:w-56 shrink-0 flex flex-col gap-4">
                     <div>
                       <span className="text-muted-foreground text-xs uppercase tracking-wider font-semibold mb-2 block">Tech Stack</span>
                       <div className="flex flex-wrap gap-2">
                         {project.stack.map((tech) => (
-                          <span
-                            key={tech}
-                            className="px-3 py-1 rounded-full bg-secondary text-foreground/70 text-xs font-medium border border-border"
-                          >
-                            {tech}
-                          </span>
+                          <span key={tech} className="px-3 py-1 rounded-full bg-secondary text-foreground/70 text-xs font-medium border border-border">{tech}</span>
                         ))}
                       </div>
                     </div>
-
                     <div className="flex gap-2 mt-auto">
-                      <Button variant="outline" size="sm" asChild className="flex-1">
-                        <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="w-4 h-4 mr-1" /> Live Demo
-                        </a>
-                      </Button>
-                      <Button variant="outline" size="sm" asChild className="flex-1">
-                        <a href={project.github} target="_blank" rel="noopener noreferrer">
-                          <Github className="w-4 h-4 mr-1" /> Code
-                        </a>
-                      </Button>
+                      {project.demo && project.demo !== "#" && (
+                        <Button variant="outline" size="sm" asChild className="flex-1">
+                          <a href={project.demo} target="_blank" rel="noopener noreferrer"><ExternalLink className="w-4 h-4 mr-1" /> Demo</a>
+                        </Button>
+                      )}
+                      {project.github && project.github !== "#" && (
+                        <Button variant="outline" size="sm" asChild className="flex-1">
+                          <a href={project.github} target="_blank" rel="noopener noreferrer"><Github className="w-4 h-4 mr-1" /> Code</a>
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
             </motion.div>
           ))}
+
+          {projects.length === 0 && !showForm && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16 border-2 border-dashed border-border rounded-2xl">
+              <p className="text-muted-foreground mb-4">No projects yet. Add your first project!</p>
+            </motion.div>
+          )}
+
+          {showForm && (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-card rounded-2xl border border-border p-8 space-y-4">
+              <h3 className="font-display text-xl font-bold text-foreground">Add Project</h3>
+              <Input placeholder="Project Title" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
+              <Textarea placeholder="Problem it solved" value={form.problem} onChange={e => setForm({ ...form, problem: e.target.value })} />
+              <Input placeholder="Tech Stack (comma-separated)" value={stackInput} onChange={e => setStackInput(e.target.value)} />
+              <Textarea placeholder="Solution you built" value={form.solution} onChange={e => setForm({ ...form, solution: e.target.value })} />
+              <Input placeholder="Result / Impact" value={form.result} onChange={e => setForm({ ...form, result: e.target.value })} />
+              <Input placeholder="Live Demo URL (optional)" value={form.demo} onChange={e => setForm({ ...form, demo: e.target.value })} />
+              <Input placeholder="GitHub URL (optional)" value={form.github} onChange={e => setForm({ ...form, github: e.target.value })} />
+              <div className="flex gap-3">
+                <Button onClick={handleAdd}><Plus className="w-4 h-4 mr-1" /> Add Project</Button>
+                <Button onClick={() => setShowForm(false)} variant="outline">Cancel</Button>
+              </div>
+            </motion.div>
+          )}
+
+          {!showForm && (
+            <div className="text-center">
+              <Button onClick={() => setShowForm(true)} size="lg">
+                <Plus className="w-5 h-5 mr-2" /> Add Project
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </section>
